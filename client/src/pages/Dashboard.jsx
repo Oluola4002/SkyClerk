@@ -157,10 +157,10 @@ export default function Dashboard() {
             />
           </div>
           <div className="lg:col-span-1 flex flex-col">
-            <MapView telemetry={telemetry} route={mission.route} />
+            <NotificationPanel notifications={notifications} />
           </div>
           <div className="lg:col-span-1 flex flex-col">
-            <NotificationPanel notifications={notifications} />
+            <MapView telemetry={telemetry} route={mission.route} />
           </div>
         </div>
       </main>

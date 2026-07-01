@@ -34,7 +34,7 @@ export default function Dashboard() {
       setSimulatorOn(m.simulatorEnabled);
     });
 
-    socket.on("missionState", (m) => setMission(m));
+    socket.on("missionState", (m) => setMission((prev) => ({ ...m, route: prev?.route })));
     socket.on("telemetry", (t) => setTelemetry(t));
     socket.on("weather", (w) => setWeather(w));
     socket.on("notification", (n) => setNotifications((prev) => [n, ...prev].slice(0, 50)));

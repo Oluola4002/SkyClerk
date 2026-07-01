@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import logo from "../assets/logo.png";
+import bg from "../assets/Background_Image.png";
 import { motion } from "framer-motion";
 
 export default function Login() {
@@ -33,13 +34,15 @@ export default function Login() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="min-h-screen flex items-center justify-center bg-[#0A0F1E] px-4"
+      className="min-h-screen relative flex items-center justify-center bg-[#0A0F1E] bg-cover bg-center bg-no-repeat px-4"
+      style={{ backgroundImage: `url(${bg})` }}
     >
+      <div className="absolute inset-0 bg-[#0A0F1E]/75" />
       <motion.div
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, delay: 0.05 }}
-        className="w-full max-w-sm bg-[#10182B] border border-white/10 rounded-2xl shadow-2xl p-8"
+        className="relative z-10 w-full max-w-sm bg-[#10182B]/80 backdrop-blur-sm border border-white/10 rounded-2xl shadow-2xl p-8"
       >
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="SkyClerk" className="w-48 rounded-2xl mb-3" />

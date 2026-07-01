@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/AuthContext";
 import logo from "../assets/logo.png";
+import bg from "../assets/Background_Image.png";
 import { motion } from "framer-motion";
 import { api, socket } from "../lib/api";
 import MissionTracker from "../components/MissionTracker";
@@ -92,8 +93,11 @@ export default function Dashboard() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="min-h-screen bg-[#0A0F1E]"
+      className="min-h-screen relative bg-[#0A0F1E] bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${bg})` }}
     >
+      <div className="absolute inset-0 bg-[#0A0F1E]/85 pointer-events-none" />
+      <div className="relative z-10">
       {/* Header */}
       <header className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center">
@@ -140,7 +144,7 @@ export default function Dashboard() {
 
         <MissionTracker status={status} />
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-6 items-stretch">
           <div className="space-y-6 lg:col-span-1">
             <WeatherCard weather={weather} />
             <TelemetryPanel
@@ -150,10 +154,10 @@ export default function Dashboard() {
               payload={mission.payload}
             />
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 flex flex-col">
             <MapView telemetry={telemetry} route={mission.route} />
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 flex flex-col">
             <NotificationPanel notifications={notifications} />
           </div>
         </div>
@@ -190,6 +194,7 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+      </div>
     </motion.div>
   );
 }

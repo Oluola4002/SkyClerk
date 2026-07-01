@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function NotificationPanel({ notifications }) {
   return (
-    <div className="bg-[#10182B] border border-white/10 rounded-2xl p-5 shadow-xl h-[420px] flex flex-col">
+    <div className="bg-[#10182B] border border-white/10 rounded-2xl p-5 shadow-xl h-full flex flex-col">
       <h2 className="text-white font-semibold mb-3">Notifications</h2>
       <div className="overflow-y-auto space-y-2 pr-1">
         {notifications.length === 0 && (

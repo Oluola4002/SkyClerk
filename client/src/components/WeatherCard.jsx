@@ -22,11 +22,13 @@ export default function WeatherCard({ weather }) {
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-white font-semibold">Weather</h2>
         <span
-          className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-            weather.safe ? "bg-success/20 text-success" : "bg-danger/20 text-danger"
+          className={`text-sm font-bold px-3 py-1 rounded-full border ${
+            weather.safe
+              ? "bg-success/20 border-success text-success shadow-lg shadow-success/30"
+              : "bg-danger/20 border-danger text-danger shadow-lg shadow-danger/30"
           }`}
         >
-          {weather.safe ? "Safe To Fly" : "Not Safe To Fly"}
+          {weather.safe ? "✓ Safe To Fly" : "✕ Not Safe To Fly"}
         </span>
       </div>
       <div className="grid grid-cols-2 gap-2 text-sm">

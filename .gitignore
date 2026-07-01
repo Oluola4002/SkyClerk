@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Environment variables — never commit these
+.env
+*.env.local
+
+# Build output
+client/dist/
+
+# Server runtime data
+server/data/
+
+# Firebase service account — treat like a password
+server/serviceAccount.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/settings.json

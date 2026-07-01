@@ -2,9 +2,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function NotificationPanel({ notifications }) {
   return (
-    <div className="bg-[#10182B] border border-white/10 rounded-2xl p-5 shadow-xl h-full flex flex-col">
+    <div className="bg-[#10182B] border border-white/10 rounded-2xl p-5 shadow-xl h-[560px] flex flex-col">
       <h2 className="text-white font-semibold mb-3">Notifications</h2>
-      <div className="overflow-y-auto space-y-2 pr-1">
+      <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pr-1">
         {notifications.length === 0 && (
           <p className="text-white/40 text-sm">No notifications yet.</p>
         )}
@@ -12,7 +12,7 @@ export default function NotificationPanel({ notifications }) {
           {notifications.map((n, i) => (
             i === 0 ? (
               <motion.div
-                key={n.time}
+                key={`${n.time}-${i}`}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
@@ -29,7 +29,7 @@ export default function NotificationPanel({ notifications }) {
               </motion.div>
             ) : (
               <motion.div
-                key={n.time}
+                key={`${n.time}-${i}`}
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 0.6, y: 0 }}
                 transition={{ duration: 0.2 }}

@@ -50,6 +50,7 @@ export default function Dashboard() {
 
   async function handleStart() {
     setBusy(true);
+    setNotifications([]);
     try {
       await api.startMission();
     } finally {
@@ -58,6 +59,7 @@ export default function Dashboard() {
   }
 
   async function handleReset() {
+    setNotifications([]);
     await api.resetMission();
   }
 

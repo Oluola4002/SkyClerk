@@ -27,7 +27,7 @@ export default function MapView({ telemetry, route }) {
   const dronePosition = [telemetry.latitude, telemetry.longitude];
 
   return (
-    <div className="bg-[#10182B] border border-white/10 rounded-2xl p-3 shadow-xl h-full flex flex-col">
+    <div className="bg-[#10182B] border border-white/10 rounded-2xl p-3 shadow-xl h-[560px] flex flex-col">
       <h2 className="text-white font-semibold px-1 mb-2">Live Map</h2>
       <div className="flex-1 min-h-0 rounded-xl overflow-hidden">
         <MapContainer center={dronePosition} zoom={16} style={{ height: "100%" }} scrollWheelZoom={false}>

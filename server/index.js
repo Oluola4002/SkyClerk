@@ -266,7 +266,7 @@ function simulatePayloadDetection() {
 function onPayloadDetected() {
   mission.payload = true;
   setStatus("PAYLOAD_LOADED");
-  pushNotification("Package detected. Payload loaded. Mission ready.");
+  pushNotification("Payload present. Package loaded — mission ready.");
   runPreflightChecks();
 }
 
@@ -312,7 +312,7 @@ function simulatePackageRemoval() {
 function onPackageRemoved() {
   mission.payload = false;
   setStatus("DELIVERED");
-  pushNotification("Package delivered.");
+  pushNotification("Payload removed. Package delivered.");
 
   setTimeout(() => {
     setStatus("RETURNING");

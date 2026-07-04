@@ -54,6 +54,9 @@ PubSubClient mqtt(espClient);
 unsigned long lastTelemetrySend = 0;
 unsigned long lastPayloadCheck = 0;
 bool lastPayloadState = false;
+bool pendingPayloadState = false;
+int payloadStableCount = 0;
+const int PAYLOAD_STABLE_THRESHOLD = 4; // require 4 consecutive matching reads (~2s) before reporting a change
 
 void setup() {
   Serial.begin(115200);
@@ -151,14 +154,23 @@ void checkPayload() {
   float distanceCm = readUltrasonicDistance();
   bool present = distanceCm > 0 && distanceCm < 5.0; // package sitting within 5cm of sensor
 
-  if (present != lastPayloadState) {
-    lastPayloadState = present;
+  // Debounce: only trust a reading once it's stayed consistent for several
+  // consecutive checks, so a single noisy ultrasonic blip can't flip the state.
+  if (present == pendingPayloadState) {
+    payloadStableCount++;
+  } else {
+    pendingPayloadState = present;
+    payloadStableCount = 1;
+  }
+
+  if (payloadStableCount >= PAYLOAD_STABLE_THRESHOLD && pendingPayloadState != lastPayloadState) {
+    lastPayloadState = pendingPayloadState;
     StaticJsonDocument<64> doc;
-    doc["present"] = present;
+    doc["present"] = lastPayloadState;
     char buffer[64];
     size_t n = serializeJson(doc, buffer);
     mqtt.publish(TOPIC_PAYLOAD, buffer, n);
-    Serial.printf("Payload state changed: %s\n", present ? "PRESENT" : "REMOVED");
+    Serial.printf("Payload state changed: %s\n", lastPayloadState ? "PRESENT" : "REMOVED");
   }
 }
 

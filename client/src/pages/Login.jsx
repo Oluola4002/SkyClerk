@@ -6,17 +6,20 @@ import bg from "../assets/Background_Image.png";
 import { motion } from "framer-motion";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, resetPassword } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setInfo("");
     setLoading(true);
     try {
       await login(email, password);
@@ -25,6 +28,24 @@ export default function Login() {
       setError("Invalid email or password.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleForgotPassword() {
+    setError("");
+    setInfo("");
+    if (!email) {
+      setError("Enter your email above first, then click 'Forgot password?'.");
+      return;
+    }
+    setResetting(true);
+    try {
+      await resetPassword(email);
+      setInfo("Password reset email sent. Check your inbox.");
+    } catch (err) {
+      setError("Could not send reset email. Check the address and try again.");
+    } finally {
+      setResetting(false);
     }
   }
 
@@ -94,9 +115,18 @@ export default function Login() {
                 )}
               </button>
             </div>
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              disabled={resetting}
+              className="mt-2 text-xs text-primary hover:text-blue-400 transition disabled:opacity-60"
+            >
+              {resetting ? "Sending reset email..." : "Forgot password?"}
+            </button>
           </div>
 
           {error && <p className="text-danger text-sm">{error}</p>}
+          {info && <p className="text-success text-sm">{info}</p>}
 
           <button
             type="submit"

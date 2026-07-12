@@ -32,6 +32,17 @@ const admin = require("firebase-admin");
 const HTTP_PORT = process.env.PORT || 4000;
 const MQTT_PORT = process.env.MQTT_PORT || 1883;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+// Also accept any device on the local network (e.g. phones/laptops on the same
+// WiFi/MiFi hitting the dashboard via this PC's LAN IP) so requests aren't
+// silently blocked by CORS during on-site testing/demos.
+const LAN_ORIGIN_PATTERN = /^https?:\/\/(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)(:\d+)?$/;
+function corsOriginCheck(origin, callback) {
+  if (!origin || origin === CLIENT_URL || LAN_ORIGIN_PATTERN.test(origin)) {
+    callback(null, true);
+  } else {
+    callback(new Error("Not allowed by CORS"));
+  }
+}
 
 // ---------- FIREBASE ADMIN ----------
 let adminReady = false;
@@ -76,11 +87,11 @@ if (!fs.existsSync(HISTORY_FILE)) {
 }
 
 const app = express();
-app.use(cors({ origin: CLIENT_URL }));
+app.use(cors({ origin: corsOriginCheck }));
 app.use(express.json());
 
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: CLIENT_URL } });
+const io = new Server(server, { cors: { origin: corsOriginCheck } });
 
 // Embedded MQTT broker (this is what the ESP32 talks to)
 const aedes = new Aedes();
@@ -267,7 +278,10 @@ function onPayloadDetected() {
   mission.payload = true;
   setStatus("PAYLOAD_LOADED");
   pushNotification("Payload present. Package loaded — mission ready.");
-  runPreflightChecks();
+
+  setTimeout(() => {
+    runPreflightChecks();
+  }, 4000);
 }
 
 function runPreflightChecks() {
